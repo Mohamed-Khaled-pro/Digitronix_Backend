@@ -43,8 +43,7 @@ app.use(bodyParser.json());
 app.use(morgan('dev'));
 app.use( authJwt() ) // any request come will ask this function to check if the token is valid or not
 
-app.use('/public/uploads', express.static(__dirname + '/public/uploads'));
-
+app.use('/public/uploads', express.static('public/uploads'));
 
 // Routes
 app.use('/api/products', productsRoutes);

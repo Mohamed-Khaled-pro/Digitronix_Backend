@@ -50,8 +50,7 @@ router.post(`/`, uploadOptions.single("image"), requireAdmin, async (req, res) =
 
     const fileName = req.file.filename;
     // بناء الرابط الكامل للملف باستخدام متغير البيئة
-const basePath = `https://${req.get("host")}/public/uploads/`;
-
+const basePath = `${BASE_URL}/public/uploads/`;
     const product = new Product({
       name: req.body.name,
       description: req.body.description,
@@ -189,8 +188,7 @@ router.put("/:id",requireAdmin, uploadOptions.single("image"), async (req, res) 
   let imagePath = product.image;
   if (req.file) {
     const fileName = req.file.filename;
-const basePath = `https://${req.get("host")}/public/uploads/`;
-    imagePath = `${basePath}${fileName}`;
+const basePath = `${BASE_URL}/public/uploads/`;    imagePath = `${basePath}${fileName}`;
   }
 
   product = await Product.findByIdAndUpdate(

@@ -59,8 +59,7 @@ router.post(`/`, requireAdmin,uploadOptions.single("image"), async (req, res) =>
     }
   
     const fileName = file.filename;
-const basePath = `https://${req.get("host")}/public/uploads/`;
-  
+const basePath = `${process.env.BASE_URL}/public/uploads/`;  
     let category = new Category({
       name: req.body.name,
       image: `${basePath}${fileName}`,
@@ -87,8 +86,7 @@ router.put('/:id', uploadOptions.single("image"), async (req, res) => {
     let imagePath = category.image; // default to old image
 
     if (file) {
-const basePath = `https://${req.get("host")}/public/uploads/`;
-      imagePath = `${basePath}${file.filename}`;
+const basePath = `${process.env.BASE_URL}/public/uploads/`;      imagePath = `${basePath}${file.filename}`;
     }
 
     const updatedCategory = await Category.findByIdAndUpdate(
