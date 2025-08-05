@@ -218,7 +218,7 @@ const basePath = `${BASE_URL}/public/uploads/`;    imagePath = `${basePath}${fil
 });
 
 // ✅ عدد المنتجات
-router.get("/get/count", requireAdmin,async (req, res) => {
+router.get("/get/count",async (req, res) => {
   try {
     const productCount = await Product.countDocuments();
     res.status(200).send({ productCount });
