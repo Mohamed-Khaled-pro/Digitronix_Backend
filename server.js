@@ -8,7 +8,7 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const allowedOrigins = [
-  "http://localhost:3001", // للتطوير المحلي
+  "http://localhost:3000", // للتطوير المحلي
   "https://digitronix-store.netlify.app" // للموقع المنشور
 ];
 
@@ -40,22 +40,24 @@ app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(morgan('dev'));
 app.use( authJwt() ) // any request come will ask this function to check if the token is valid or not
-app.use(errorHandler)
- app.use('/public/uploads', express.static(__dirname + '/public/uploads'));
+app.use('/public/uploads', express.static(__dirname + '/public/uploads'));
 
 // Routes
 app.use('/api/products', productsRoutes);
 app.use('/api/categories', categoriesRoutes);
 app.use('/api/users', usersRoutes);
 app.use('/api/orders', ordersRoutes);
+app.use(errorHandler)
 
 
 // DB Connection
 mongoose.connect(process.env.CONNECTION_BASE, {
-    dbName: 'mydatabase'
+    dbName: 'mydatabase',
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
 })
 .then(() => console.log('Connected to database'))
-.catch((err) => console.log(err));
+.catch((err) => console.log('DB connection error:', err));
 
 // Start Server
 app.listen(port, () => {
