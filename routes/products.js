@@ -7,12 +7,14 @@ const multer = require("multer");
 const fs = require("fs");
 const requireAdmin = require("../helpers/requireAdmin")
 
+const BASE_URL = process.env.BASE_URL || "http://localhost:3000"; // عدل المنفذ إذا كان غير 3000
+
+
 // إنشاء مجلد التخزين لو مش موجود
 const uploadPath = "public/uploads";
 if (!fs.existsSync(uploadPath)) {
   fs.mkdirSync(uploadPath, { recursive: true });
 }
-
 // أنواع الصور المقبولة
 const FILE_TYPE_MAP = {
   "image/png": "png",
@@ -37,7 +39,7 @@ const storage = multer.diskStorage({
 const uploadOptions = multer({ storage: storage });
 
 // ✅ إنشاء منتج جديد
-router.post(`/`, uploadOptions.single("image"), requireAdmin,async (req, res) => {
+router.post(`/`, uploadOptions.single("image"), requireAdmin, async (req, res) => {
   try {
     const category = await Category.findById(req.body.category);
     if (!category)
@@ -47,7 +49,8 @@ router.post(`/`, uploadOptions.single("image"), requireAdmin,async (req, res) =>
       return res.status(400).send({ message: "❌ Image is required" });
 
     const fileName = req.file.filename;
-    const basePath = `${req.protocol}://${req.get("host")}/public/uploads/`;
+    // بناء الرابط الكامل للملف باستخدام متغير البيئة
+    const basePath = `${BASE_URL}/public/uploads/`;
 
     const product = new Product({
       name: req.body.name,
