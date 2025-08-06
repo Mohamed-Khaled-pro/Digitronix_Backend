@@ -64,5 +64,5 @@ mongoose.connect(process.env.CONNECTION_BASE, {
 // Start Server
 app.listen(port, () => {
     console.log(`API URL: ${api}`);
-    console.log(`Server is running on https://backend-production-b65ae.up.railway.app`);
+    console.log(`Server is running on ${process.env.BASE_URL}`);
 });
