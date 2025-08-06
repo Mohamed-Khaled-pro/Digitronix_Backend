@@ -1,4 +1,4 @@
-console.log("✅ BASE_URL:", process.env.BASE_URL);
+console.log("✅ BASE_URL:", process.env.BASE_URL); // test
 
 const express = require("express");
 const router = express.Router();
