@@ -6,8 +6,9 @@ const { Category } = require("../models/category");
 const multer = require("multer");
 const fs = require("fs");
 const requireAdmin = require("../helpers/requireAdmin")
+require("dotenv").config();
 
-const BASE_URL = process.env.BASE_URL || "http://localhost:3000"; // عدل المنفذ إذا كان غير 3000
+const Url = process.env.BASE_URL || "http://localhost:3000"; // عدل المنفذ إذا كان غير 3000
 
 
 // إنشاء مجلد التخزين لو مش موجود
@@ -50,7 +51,7 @@ router.post(`/`, uploadOptions.single("image"), requireAdmin, async (req, res) =
 
     const fileName = req.file.filename;
     // بناء الرابط الكامل للملف باستخدام متغير البيئة
-const basePath = `${BASE_URL}/public/uploads/`;
+const basePath = `${Url}/public/uploads/`;
     const product = new Product({
       name: req.body.name,
       description: req.body.description,
@@ -188,7 +189,7 @@ router.put("/:id",requireAdmin, uploadOptions.single("image"), async (req, res) 
   let imagePath = product.image;
   if (req.file) {
     const fileName = req.file.filename;
-const basePath = `${BASE_URL}/public/uploads/`;    imagePath = `${basePath}${fileName}`;
+const basePath = `${Url}/public/uploads/`;    imagePath = `${basePath}${fileName}`;
   }
 
   product = await Product.findByIdAndUpdate(
