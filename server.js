@@ -10,7 +10,7 @@ const cors = require('cors');
 const allowedOrigins = [
   "https://digitronix-store.netlify.app" // للموقع المنشور
 ];
-
+//hello
 app.use(cors({
  origin: (origin, callback) => {
     if (!origin || allowedOrigins.includes(origin)) {
