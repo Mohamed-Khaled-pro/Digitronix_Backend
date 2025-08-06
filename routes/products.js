@@ -1,3 +1,5 @@
+console.log("✅ BASE_URL:", process.env.BASE_URL);
+
 const express = require("express");
 const router = express.Router();
 const mongoose = require("mongoose");
