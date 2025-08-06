@@ -5,7 +5,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const requireAdmin = require('../helpers/requireAdmin');
 router.get(`/`, async (req, res) => {
-        const userList = await User.find().select('-passwordHash'); // -(anything) will excluded
+        const userList = await User.find().select('-passwordHash');
         if (!userList || userList.length === 0) {
             return res.status(404).json({ message: 'No users found', success: false });
         }

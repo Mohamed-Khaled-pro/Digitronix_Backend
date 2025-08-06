@@ -41,7 +41,7 @@ app.use(compression())
 app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(morgan('dev'));
-app.use( authJwt() ) // any request come will ask this function to check if the token is valid or not
+app.use( authJwt() ) 
 
 app.use('/public/uploads', express.static('public/uploads'));
 
