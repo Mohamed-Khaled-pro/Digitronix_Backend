@@ -8,7 +8,7 @@ const fs = require("fs");
 const requireAdmin = require("../helpers/requireAdmin")
 require("dotenv").config();
 
-const Url = process.env.BASE_URL || "http://localhost:3000"; // عدل المنفذ إذا كان غير 3000
+const Url = process.env.BASE_URL; 
 
 
 // إنشاء مجلد التخزين لو مش موجود

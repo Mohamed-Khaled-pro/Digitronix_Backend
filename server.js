@@ -8,7 +8,6 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const allowedOrigins = [
-  "http://localhost:3000", // للتطوير المحلي
   "https://digitronix-store.netlify.app" // للموقع المنشور
 ];
 
@@ -65,5 +64,5 @@ mongoose.connect(process.env.CONNECTION_BASE, {
 // Start Server
 app.listen(port, () => {
     console.log(`API URL: ${api}`);
-    console.log(`Server is running on http://localhost:${port}`);
+    console.log(`Server is running on https://backend-production-b65ae.up.railway.app`);
 });
