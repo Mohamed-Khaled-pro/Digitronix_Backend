@@ -42,6 +42,8 @@ const uploadOptions = multer({ storage: storage });
 // ✅ إنشاء منتج جديد
 router.post(`/`, uploadOptions.single("image"), requireAdmin, async (req, res) => {
   try {
+    console.log("✅ BASE_URL:",process.env.BASE_URL); // test
+
     const category = await Category.findById(req.body.category);
     if (!category)
       return res.status(400).send({ message: "❌ Invalid Category" });
@@ -189,7 +191,8 @@ router.put("/:id",requireAdmin, uploadOptions.single("image"), async (req, res) 
   let imagePath = product.image;
   if (req.file) {
     const fileName = req.file.filename;
-const basePath = `${Url}/public/uploads/`;    imagePath = `${basePath}${fileName}`;
+const basePath = `${process.env.BASE_URL}/public/uploads/`;   
+imagePath = `${basePath}${fileName}`;
   }
 
   product = await Product.findByIdAndUpdate(
