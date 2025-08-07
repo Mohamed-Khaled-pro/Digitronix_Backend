@@ -1,4 +1,5 @@
-console.log("✅ BASE_URL:", process.env.BASE_URL); // test
+console.log("✅ BASE_URL:",process.env.BASE_URL); // test
+require('dotenv').config();
 const express = require("express");
 const router = express.Router();
 const mongoose = require("mongoose");
@@ -7,7 +8,6 @@ const { Category } = require("../models/category");
 const multer = require("multer");
 const fs = require("fs");
 const requireAdmin = require("../helpers/requireAdmin")
-require("dotenv").config();
 
 const Url=process.env.BASE_URL; 
 
