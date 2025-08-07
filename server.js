@@ -40,6 +40,13 @@ app.use(compression())
 app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(morgan('combined'));
+app.use((req, res, next) => {
+  console.log(`✅ Incoming request: ${req.method} ${req.url} at ${new Date().toISOString()}`);
+  console.log("✅ Request headers:", req.headers);
+  console.log("✅ Request body:", req.body);
+  console.log("✅ Request file:", req.file);
+  next();
+});
 app.use( authJwt() ) 
 
 const path = require('path');
