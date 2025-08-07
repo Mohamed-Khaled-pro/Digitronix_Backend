@@ -1,5 +1,4 @@
 console.log("✅ BASE_URL:", process.env.BASE_URL); // test
-
 const express = require("express");
 const router = express.Router();
 const mongoose = require("mongoose");
@@ -10,7 +9,7 @@ const fs = require("fs");
 const requireAdmin = require("../helpers/requireAdmin")
 require("dotenv").config();
 
-const Url = process.env.BASE_URL; 
+const Url=process.env.BASE_URL; 
 
 
 // إنشاء مجلد التخزين لو مش موجود
