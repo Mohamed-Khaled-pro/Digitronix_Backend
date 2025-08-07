@@ -29,7 +29,7 @@ const categoriesRoutes = require('./routes/categories');
 const authJwt = require('./helpers/jwt');
 const errorHandler = require('./helpers/error-handler');
 const port = 3000;
-const api = process.env.API_URL || '/api';
+const api = process.env.API_URL;
 const cookieParser = require("cookie-parser");
 const compression = require('compression')
 app.use(compression())
