@@ -1,5 +1,5 @@
-console.log("✅ BASE_URL:",process.env.BASE_URL); // test
 require('dotenv').config();
+console.log("✅ BASE_URL:",process.env.BASE_URL); // test
 const express = require("express");
 const router = express.Router();
 const mongoose = require("mongoose");
@@ -9,7 +9,6 @@ const multer = require("multer");
 const fs = require("fs");
 const requireAdmin = require("../helpers/requireAdmin")
 
-const Url=process.env.BASE_URL; 
 
 
 // إنشاء مجلد التخزين لو مش موجود
@@ -52,7 +51,7 @@ router.post(`/`, uploadOptions.single("image"), requireAdmin, async (req, res) =
 
     const fileName = req.file.filename;
     // بناء الرابط الكامل للملف باستخدام متغير البيئة
-const basePath = `${Url}/public/uploads/`;
+const basePath = `${process.env.BASE_URL}/public/uploads/`;
     const product = new Product({
       name: req.body.name,
       description: req.body.description,
