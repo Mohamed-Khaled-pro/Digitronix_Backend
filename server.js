@@ -54,7 +54,11 @@ app.use(errorHandler)
 
 
 // DB Connection
-mongoose.connect(process.env.CONNECTION_BASE)
+mongoose.connect(process.env.CONNECTION_BASE, {
+    dbName: 'mydatabase',
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+})
 .then(() => console.log('Connected to database'))
 .catch((err) => console.log('DB connection error:', err));
 
