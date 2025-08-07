@@ -39,7 +39,7 @@ app.use(compression())
 // Middlewares
 app.use(cookieParser());
 app.use(bodyParser.json());
-app.use(morgan('dev'));
+app.use(morgan('combined'));
 app.use( authJwt() ) 
 
 const path = require('path');
