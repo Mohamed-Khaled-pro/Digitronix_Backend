@@ -42,7 +42,8 @@ app.use(bodyParser.json());
 app.use(morgan('dev'));
 app.use( authJwt() ) 
 
-app.use('/public/uploads', express.static('public/uploads'));
+const path = require('path');
+app.use('/public/uploads', express.static(path.join(__dirname, 'public/uploads')));
 
 // Routes
 app.use('/api/products', productsRoutes);
