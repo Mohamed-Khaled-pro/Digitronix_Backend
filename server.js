@@ -1,5 +1,4 @@
 require('dotenv').config();
-console.log('API_URL is:', process.env.API_URL)
 const express = require('express');
 const app = express();
 
@@ -8,7 +7,7 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const allowedOrigins = [
-  "https://digitronix-store.netlify.app" // للموقع المنشور
+  "https://digitronix-store.netlify.app/"
 ];
 //hello
 app.use(cors({
@@ -72,5 +71,5 @@ mongoose.connect(process.env.CONNECTION_BASE, {
 // Start Server
 app.listen(port, () => {
     console.log(`API URL: ${api}`);
-    console.log(`Server is running on ${process.env.BASE_URL}`);
+    console.log(`Server is running `);
 });

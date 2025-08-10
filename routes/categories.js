@@ -10,7 +10,6 @@ if (!fs.existsSync(uploadPath)) {
   fs.mkdirSync(uploadPath, { recursive: true });
 }
 
-// ✅ أنواع الملفات المسموح بها
 const FILE_TYPE_MAP = {
   "image/png": "png",
   "image/jpeg": "jpeg",
@@ -41,6 +40,7 @@ router.get(`/`, async (req, res) => {
         res.status(200).send(categoryList)
         
 });
+
 router.get('/:id' , async (req, res) => {
     const id = req.params.id;
     const category = await Category.findById(id);

@@ -42,7 +42,6 @@ const uploadOptions = multer({ storage: storage });
 // ✅ إنشاء منتج جديد
 router.post(`/`, uploadOptions.single("image"), requireAdmin, async (req, res) => {
   try {
-    console.log("✅ BASE_URL:",process.env.BASE_URL); // test
 
     const category = await Category.findById(req.body.category);
     if (!category)
@@ -53,7 +52,7 @@ router.post(`/`, uploadOptions.single("image"), requireAdmin, async (req, res) =
 
     const fileName = req.file.filename;
     // بناء الرابط الكامل للملف باستخدام متغير البيئة
-const basePath = `${process.env.BASE_URL}/public/uploads/`;
+const basePath = `https://backend-production-b65ae.up.railway.app/public/uploads/`;
     const product = new Product({
       name: req.body.name,
       description: req.body.description,
@@ -191,7 +190,7 @@ router.put("/:id",requireAdmin, uploadOptions.single("image"), async (req, res) 
   let imagePath = product.image;
   if (req.file) {
     const fileName = req.file.filename;
-const basePath = `${process.env.BASE_URL}/public/uploads/`;   
+const basePath = `https://backend-production-b65ae.up.railway.app/public/uploads/`;   
 imagePath = `${basePath}${fileName}`;
   }
 
