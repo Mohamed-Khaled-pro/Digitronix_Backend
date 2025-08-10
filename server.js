@@ -7,7 +7,7 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const allowedOrigins = [
-  "https://digitronix-store.netlify.app/"
+  "https://digitronix-store.netlify.app"
 ];
 //hello
 app.use(cors({
