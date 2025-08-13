@@ -8,7 +8,7 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const allowedOrigins = [
   "https://digitronix-store.netlify.app",
-  "http://localhost:3000"
+  "http://localhost:3001"
 ];
 //hello
 app.use(cors({
