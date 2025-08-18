@@ -96,8 +96,8 @@ res.cookie("token", token, {
 });
 
 router.post("/logout", (req, res) => {
-  res.clearCookie("token");
-  res.status(200).json({ message: "Logout successful" });
+  res.clearCookie("token", { httpOnly: true, sameSite: "strict" });
+  return res.status(200).json({ message: "Logged out successfully" }); 
 });
 
  router.get("/get/count",requireAdmin, async (req, res) => {

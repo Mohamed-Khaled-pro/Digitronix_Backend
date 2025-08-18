@@ -210,7 +210,7 @@ router.get("/get/count", async (req, res) => {
 
 router.put("/:id/state", async (req, res) => {
   try {
-    const order = await Order.findById(req.params.id);
+    let order = await Order.findById(req.params.id);
 
     if (!order) {
       return res.status(404).json({ message: "Order not found", success: false });
@@ -219,10 +219,22 @@ router.put("/:id/state", async (req, res) => {
     order.state = req.body.state;
     await order.save();
 
+    // populate عشان يرجع كامل
+    order = await Order.findById(req.params.id)
+      .populate("user")
+      .populate({
+        path: "orderItems",
+        populate: {
+          path: "product",
+          populate: "category",
+        },
+      });
+
     res.status(200).json({ message: "Order state updated", order, success: true });
   } catch (err) {
     console.error("Update order state error:", err);
     res.status(500).json({ message: "Failed to update order state", success: false });
   }
 });
+
 module.exports = router;
