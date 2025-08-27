@@ -8,7 +8,7 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const allowedOrigins = [
   "https://digitronix-store.netlify.app",
-  "http://localhost:3000"
+  "http://localhost:3001"
 ];
 //hello
 app.use(cors({
@@ -28,7 +28,7 @@ const ordersRoutes = require('./routes/orders')
 const categoriesRoutes = require('./routes/categories');
 const authJwt = require('./helpers/jwt');
 const errorHandler = require('./helpers/error-handler');
-const port = 3001;
+const port = 3000;
 const api = process.env.API_URL;
 const cookieParser = require("cookie-parser");
 const compression = require('compression')
