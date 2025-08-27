@@ -73,8 +73,8 @@ router.post('/register', async (req, res) => {
   );
 
 res.cookie("token", token, {
-  httpOnly: true,
-  secure: true,
+  httpOnly: false,
+  secure: false,
   sameSite: "none",
   maxAge: 2 * 24 * 60 * 60 * 1000,
 })
