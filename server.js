@@ -50,7 +50,7 @@ app.use((req, res, next) => {
 app.use( authJwt() ) 
 
 const path = require('path');
-app.use('/uploads', express.static(path.join(__dirname, 'public/uploads')));
+app.use('/public/uploads', express.static(path.join(__dirname, 'public/uploads')));
 
 // Routes
 app.use('/api/products', productsRoutes);
