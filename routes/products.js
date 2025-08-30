@@ -52,7 +52,7 @@ router.post(`/`, uploadOptions.single("image"), requireAdmin, async (req, res) =
 
     const fileName = req.file.filename;
     // بناء الرابط الكامل للملف باستخدام متغير البيئة
-const basePath = `https://backend-production-b65ae.up.railway.app/public/uploads/`;
+const basePath = `https://backend-production-b65ae.up.railway.app/uploads/`;
     const product = new Product({
       name: req.body.name,
       description: req.body.description,
@@ -190,7 +190,7 @@ router.put("/:id",requireAdmin, uploadOptions.single("image"), async (req, res) 
   let imagePath = product.image;
   if (req.file) {
     const fileName = req.file.filename;
-const basePath = `https://backend-production-b65ae.up.railway.app/public/uploads/`;   
+const basePath = `https://backend-production-b65ae.up.railway.app/uploads/`;   
 imagePath = `${basePath}${fileName}`;
   }
 
