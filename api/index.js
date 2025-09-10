@@ -51,7 +51,7 @@ app.use("/public/uploads", express.static(path.join(__dirname, "../public/upload
 
 app.use("/products", productsRoutes);
 app.use("/categories", categoriesRoutes);
-app.use("/users", usersRoutes);
+app.use("/users", usersRoutes);// users
 app.use("/orders", ordersRoutes);
 app.use(errorHandler);
 
