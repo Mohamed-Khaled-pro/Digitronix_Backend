@@ -14,21 +14,18 @@ const allowedOrigins = [
   "https://digitronix-store.netlify.app",
   "http://localhost:3000"
 ];
-
-app.use((req, res, next) => {
-  const origin = req.headers.origin;
-  if (allowedOrigins.includes(origin)) {
-    res.setHeader("Access-Control-Allow-Origin", origin);
-  }
-  res.setHeader("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,OPTIONS");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
-  res.setHeader("Access-Control-Allow-Credentials", "true");
-  if (req.method === "OPTIONS") {
-    return res.sendStatus(200);
-  }
-  next();
-});
-
+app.use(cors({
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true, // لازم عشان withCredentials: true
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"]
+}));
 
 // Middlewares
 app.use(cookieParser());
@@ -52,10 +49,10 @@ const errorHandler = require("../helpers/error-handler");
 app.use(authJwt());
 app.use("/public/uploads", express.static(path.join(__dirname, "../public/uploads")));
 
-app.use("api/products", productsRoutes);
-app.use("api/categories", categoriesRoutes);
-app.use("api/users", usersRoutes);
-app.use("api/orders", ordersRoutes);
+app.use("/products", productsRoutes);
+app.use("/categories", categoriesRoutes);
+app.use("/users", usersRoutes);
+app.use("/orders", ordersRoutes);
 app.use(errorHandler);
 
 // Root route (for testing)
