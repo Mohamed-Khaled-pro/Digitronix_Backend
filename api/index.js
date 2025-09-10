@@ -7,10 +7,7 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const compression = require("compression");
-
 const app = express();
-const cors = require("cors");
-
 app.use(cors({
   origin: "https://digitronix-store.netlify.app",
   credentials: true,
