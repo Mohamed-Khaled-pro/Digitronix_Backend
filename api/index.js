@@ -9,8 +9,12 @@ const cookieParser = require("cookie-parser");
 const compression = require("compression");
 
 const app = express();
-app.use(cors());
+const cors = require("cors");
 
+app.use(cors({
+  origin: "https://digitronix-store.netlify.app",
+  credentials: true,
+}));
 
 // Middlewares
 app.use(cookieParser());
