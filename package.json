@@ -4,7 +4,7 @@
   "main": "api/index.js",
   "type": "commonjs",
   "scripts": {
-     "start": "node api/index.js",
+    "start": "node api/index.js",
     "dev": "nodemon api/index.js"
   },
   "author": "",
@@ -13,6 +13,7 @@
   "dependencies": {
     "bcrypt": "^6.0.0",
     "body-parser": "^2.2.0",
+    "cloudinary": "^1.41.3",
     "compression": "^1.8.1",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
@@ -22,6 +23,7 @@
     "mongoose": "^8.16.4",
     "morgan": "^1.10.1",
     "multer": "^2.0.2",
+    "multer-storage-cloudinary": "^4.0.0",
     "nodemon": "^3.1.10",
     "prettier": "^3.6.2",
     "serverless-http": "^4.0.0"

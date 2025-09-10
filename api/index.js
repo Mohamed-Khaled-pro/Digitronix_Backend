@@ -47,7 +47,6 @@ const authJwt = require("../helpers/jwt");
 const errorHandler = require("../helpers/error-handler");
 
 app.use(authJwt());
-app.use("/public/uploads", express.static(path.join(__dirname, "../public/uploads")));
 
 app.use("/api/products", productsRoutes);
 app.use("/api/categories", categoriesRoutes);

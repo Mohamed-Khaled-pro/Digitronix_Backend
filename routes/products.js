@@ -1,63 +1,52 @@
-require('dotenv').config();
-console.log("✅ BASE_URL:",process.env.BASE_URL); // test
+require("dotenv").config();
 const express = require("express");
 const router = express.Router();
 const mongoose = require("mongoose");
 const { Product } = require("../models/product");
 const { Category } = require("../models/category");
 const multer = require("multer");
-const fs = require("fs");
-const requireAdmin = require("../helpers/requireAdmin")
+const requireAdmin = require("../helpers/requireAdmin");
 
+// 📌 إعداد Cloudinary
+const cloudinary = require("cloudinary").v2;
+const { CloudinaryStorage } = require("multer-storage-cloudinary");
 
+cloudinary.config({
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.CLOUD_KEY,
+  api_secret: process.env.CLOUD_SECRET,
+});
 
-// إنشاء مجلد التخزين لو مش موجود
-const uploadPath = "public/uploads";
-if (!fs.existsSync(uploadPath)) {
-  fs.mkdirSync(uploadPath, { recursive: true });
-}
-// أنواع الصور المقبولة
-const FILE_TYPE_MAP = {
-  "image/png": "png",
-  "image/jpeg": "jpeg",
-  "image/jpg": "jpg",
-};
-
-// إعداد التخزين
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    const isValid = FILE_TYPE_MAP[file.mimetype];
-    let uploadError = isValid ? null : new Error("Invalid image type");
-    cb(uploadError, uploadPath);
-  },
-  filename: function (req, file, cb) {
-    const extension = FILE_TYPE_MAP[file.mimetype];
-    const fileName = file.originalname.split(" ").join("-");
-    cb(null, `${fileName}-${Date.now()}.${extension}`);
+// 📌 Multer مع Cloudinary
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: "digitronix_products",
+    allowed_formats: ["jpg", "png", "jpeg"],
   },
 });
 
 const uploadOptions = multer({ storage: storage });
 
-// ✅ إنشاء منتج جديد
+/**
+ * ✅ إنشاء منتج جديد
+ */
 router.post(`/`, uploadOptions.single("image"), requireAdmin, async (req, res) => {
   try {
-
     const category = await Category.findById(req.body.category);
-    if (!category)
+    if (!category) {
       return res.status(400).send({ message: "❌ Invalid Category" });
+    }
 
-    if (!req.file)
+    if (!req.file) {
       return res.status(400).send({ message: "❌ Image is required" });
+    }
 
-    const fileName = req.file.filename;
-    // بناء الرابط الكامل للملف باستخدام متغير البيئة
-const basePath = `https://backend-production-b65ae.up.railway.app/public/uploads/`;
     const product = new Product({
       name: req.body.name,
       description: req.body.description,
       richdescription: req.body.richdescription,
-      image: `${basePath}${fileName}`,
+      image: req.file.path, // Cloudinary بيرجع لينك مباشر
       brand: req.body.brand,
       price: req.body.price,
       category: req.body.category,
@@ -68,18 +57,16 @@ const basePath = `https://backend-production-b65ae.up.railway.app/public/uploads
     });
 
     const savedProduct = await product.save();
-
-    if (!savedProduct)
-      return res.status(400).send({ message: "❌ The product cannot be created" });
-
     res.status(201).send(savedProduct);
   } catch (err) {
-    console.log("💥 Error:", err.message);
+    console.error("💥 Error:", err.message);
     res.status(500).send({ message: "Internal Server Error", error: err.message });
   }
 });
 
-// ✅ الحصول على كل المنتجات
+/**
+ * ✅ الحصول على كل المنتجات
+ */
 router.get(`/`, async (req, res) => {
   try {
     let filter = {};
@@ -107,7 +94,9 @@ router.get(`/`, async (req, res) => {
   }
 });
 
-// ✅ البحث عن منتج
+/**
+ * ✅ البحث عن منتج
+ */
 router.get('/search', async (req, res) => {
   try {
     const { keyword } = req.query;
@@ -135,7 +124,9 @@ router.get('/search', async (req, res) => {
   }
 });
 
-// ✅ منتج واحد
+/**
+ * ✅ منتج واحد
+ */
 router.get(`/:id`, async (req, res) => {
   try {
     const product = await Product.findById(req.params.id).populate("category");
@@ -154,8 +145,10 @@ router.get(`/:id`, async (req, res) => {
   }
 });
 
-// ✅ حذف منتج
-router.delete("/:id",requireAdmin, (req, res) => {
+/**
+ * ✅ حذف منتج
+ */
+router.delete("/:id", requireAdmin, (req, res) => {
   Product.findByIdAndDelete(req.params.id)
     .then((product) => {
       if (product) {
@@ -173,8 +166,10 @@ router.delete("/:id",requireAdmin, (req, res) => {
     });
 });
 
-// ✅ تعديل منتج
-router.put("/:id",requireAdmin, uploadOptions.single("image"), async (req, res) => {
+/**
+ * ✅ تعديل منتج
+ */
+router.put("/:id", requireAdmin, uploadOptions.single("image"), async (req, res) => {
   if (!mongoose.isValidObjectId(req.params.id)) {
     return res.status(400).json({ message: "Invalid product id", success: false });
   }
@@ -189,9 +184,7 @@ router.put("/:id",requireAdmin, uploadOptions.single("image"), async (req, res) 
 
   let imagePath = product.image;
   if (req.file) {
-    const fileName = req.file.filename;
-const basePath = `https://backend-production-b65ae.up.railway.app/public/uploads/`;   
-imagePath = `${basePath}${fileName}`;
+    imagePath = req.file.path; // Cloudinary link
   }
 
   product = await Product.findByIdAndUpdate(
@@ -220,8 +213,10 @@ imagePath = `${basePath}${fileName}`;
   res.send(product);
 });
 
-// ✅ عدد المنتجات
-router.get("/get/count",async (req, res) => {
+/**
+ * ✅ عدد المنتجات
+ */
+router.get("/get/count", async (req, res) => {
   try {
     const productCount = await Product.countDocuments();
     res.status(200).send({ productCount });
@@ -234,7 +229,9 @@ router.get("/get/count",async (req, res) => {
   }
 });
 
-// ✅ المنتجات المميزة
+/**
+ * ✅ المنتجات المميزة
+ */
 router.get("/get/featured", async (req, res) => {
   try {
     const productFeatured = await Product.find({ isFeatured: true });
