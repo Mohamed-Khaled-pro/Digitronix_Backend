@@ -7,7 +7,6 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const compression = require("compression");
-const path = require("path");
 
 const app = express();
 const allowedOrigins = [
