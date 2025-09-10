@@ -9,22 +9,8 @@ const cookieParser = require("cookie-parser");
 const compression = require("compression");
 
 const app = express();
-const allowedOrigins = [
-  "https://digitronix-store.netlify.app",
-  "http://localhost:3000"
-];
-app.use(cors({
-  origin: (origin, callback) => {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error("Not allowed by CORS"));
-    }
-  },
-  credentials: true, // لازم عشان withCredentials: true
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"]
-}));
+app.use(cors());
+
 
 // Middlewares
 app.use(cookieParser());
