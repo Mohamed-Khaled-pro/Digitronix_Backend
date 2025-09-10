@@ -70,7 +70,6 @@ mongoose.connect(process.env.CONNECTION_BASE, {
 .catch((err) => console.log('DB connection error:', err));
 
 // Start Server
-app.listen(port, () => {
-    console.log(`API URL: ${api}`);
-    console.log(`Server is running `);
-});
+const serverless = require("serverless-http");
+module.exports = app;
+module.exports.handler = serverless(app);
