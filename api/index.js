@@ -11,20 +11,9 @@ const path = require("path");
 
 const app = express();
 
-const allowedOrigins = [
-  "https://digitronix-store.netlify.app",
-  "http://localhost:3001"
-];
-
 app.use(cors({
-  origin: (origin, callback) => {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error("Not allowed by CORS"));
-    }
-  },
-  credentials: true,
+  origin: "https://digitronix-store.netlify.app",
+  credentials: true
 }));
 
 // Middlewares
