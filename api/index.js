@@ -38,10 +38,10 @@ const errorHandler = require("../helpers/error-handler");
 app.use(authJwt());
 app.use("/public/uploads", express.static(path.join(__dirname, "../public/uploads")));
 
-app.use("/api/products", productsRoutes);
-app.use("/api/categories", categoriesRoutes);
-app.use("/api/users", usersRoutes);
-app.use("/api/orders", ordersRoutes);
+app.use("/products", productsRoutes);
+app.use("/categories", categoriesRoutes);
+app.use("/users", usersRoutes);
+app.use("/orders", ordersRoutes);
 app.use(errorHandler);
 
 // Root route (for testing)
