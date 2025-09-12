@@ -69,8 +69,9 @@ router.post(`/`, uploadOptions.single("image"), requireAdmin, async (req, res) =
     console.log("✅ Product saved:", savedProduct);
     res.status(201).send(savedProduct);
   } catch (err) {
-    console.error("💥 Full Error:", err);
-    res.status(500).send({ message: "Internal Server Error", error: err.message });
+console.error("💥 Full Error:", err.message);
+console.error("💥 Error Stack:", err.stack);
+console.error("💥 Error JSON:", JSON.stringify(err, null, 2));    res.status(500).send({ message: "Internal Server Error", error: err.message });
   }
 });
 
