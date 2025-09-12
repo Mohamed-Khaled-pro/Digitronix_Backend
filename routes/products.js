@@ -36,23 +36,26 @@ const uploadOptions = multer({ storage: storage });
  * ✅ إنشاء منتج جديد
  */
 router.post(`/`, uploadOptions.single("image"), requireAdmin, async (req, res) => {
-  console.log("Uploaded file info:", req.file);
+  console.log("📝 Incoming request body:", req.body);
+  console.log("📝 Incoming file:", req.file);
 
   try {
     const category = await Category.findById(req.body.category);
     if (!category) {
-      return res.status(400).send({ message: "❌ Invalid Category" });
+      console.log("❌ Invalid category");
+      return res.status(400).send({ message: "Invalid Category" });
     }
 
     if (!req.file) {
-      return res.status(400).send({ message: "❌ Image is required" });
+      console.log("❌ Image not uploaded");
+      return res.status(400).send({ message: "Image is required" });
     }
 
     const product = new Product({
       name: req.body.name,
       description: req.body.description,
       richdescription: req.body.richdescription,
-      image: req.file.path, // Cloudinary بيرجع لينك مباشر
+      image: req.file.path,
       brand: req.body.brand,
       price: req.body.price,
       category: req.body.category,
@@ -63,12 +66,14 @@ router.post(`/`, uploadOptions.single("image"), requireAdmin, async (req, res) =
     });
 
     const savedProduct = await product.save();
+    console.log("✅ Product saved:", savedProduct);
     res.status(201).send(savedProduct);
   } catch (err) {
-    console.error("💥 Error:", err.message);
+    console.error("💥 Full Error:", err);
     res.status(500).send({ message: "Internal Server Error", error: err.message });
   }
 });
+
 
 /**
  * ✅ الحصول على كل المنتجات
