@@ -37,7 +37,8 @@ app.use(authJwt());
 app.use("/api/products", productsRoutes);
 app.use("/api/categories", categoriesRoutes);
 app.use("/api/users", usersRoutes);// users
-app.use("/api/orders", ordersRoutes);
+app.use("/api/orders", ordersRoutes);//orders
+
 app.use(errorHandler);
 
 // Root route (for testing)
