@@ -15,7 +15,7 @@ app.use(
     origin: [
       "http://localhost:3000",
       "http://localhost:5173",
-      "https://backend-store-production-e3fe.up.railway.app/",
+      "https://digitronix-frontend.vercel.app",
     ],
     credentials: true,
   })
