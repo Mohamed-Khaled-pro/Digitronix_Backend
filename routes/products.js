@@ -42,35 +42,32 @@ router.post(`/`, uploadOptions.single("image"), requireAdmin, async (req, res) =
       return res.status(400).send({ message: "Invalid Category" });
     }
 
-    if (!req.file) {
-      console.log("❌ Image not uploaded");
-      return res.status(400).send({ message: "Image is required" });
-    }
+    // ✅ الصورة بقت اختيارية - لو مفيش صورة نحط قيمة افتراضية أو فاضية
+    const imagePath = req.file ? req.file.path : "";
 
     const product = new Product({
       name: req.body.name,
       description: req.body.description,
-      richdescription: req.body.richdescription,
-      image: req.file.path,
+      richDescription: req.body.richDescription,
+      image: imagePath,
       brand: req.body.brand,
       price: req.body.price,
       category: req.body.category,
       countInStock: req.body.countInStock,
       rating: req.body.rating,
       numReviews: req.body.numReviews,
-      isFeatured: req.body.isFeatured,
+      isFeatured: req.body.isFeatured === "true",
     });
 
     const savedProduct = await product.save();
     console.log("✅ Product saved:", savedProduct);
     res.status(201).send(savedProduct);
   } catch (err) {
-console.error("💥 Full Error:", err.message);
-console.error("💥 Error Stack:", err.stack);
-console.error("💥 Error JSON:", JSON.stringify(err, null, 2));    res.status(500).send({ message: "Internal Server Error", error: err.message });
+    console.error("💥 Full Error:", err.message);
+    console.error("💥 Error Stack:", err.stack);
+    res.status(500).send({ message: "Internal Server Error", error: err.message });
   }
 });
-
 
 /**
  * ✅ الحصول على كل المنتجات
