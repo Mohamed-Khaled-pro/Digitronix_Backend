@@ -6,23 +6,15 @@ const { Product } = require("../models/product");
 const { Category } = require("../models/category");
 const multer = require("multer");
 const requireAdmin = require("../helpers/requireAdmin");
-
-// 📌 إعداد Cloudinary
 const cloudinary = require("cloudinary").v2;
 const { CloudinaryStorage } = require("multer-storage-cloudinary");
 
 cloudinary.config({
-   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET,
-});
-console.log({
-  name: process.env.CLOUDINARY_CLOUD_NAME,
-  key: process.env.CLOUDINARY_API_KEY,
-  secret: process.env.CLOUDINARY_API_SECRET ? "OK" : "NO",
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.CLOUD_KEY,
+  api_secret: process.env.CLOUD_SECRET,
 });
 
-// 📌 Multer مع Cloudinary
 const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: {
@@ -31,8 +23,9 @@ const storage = new CloudinaryStorage({
   },
 });
 
-const uploadOptions = multer({ storage: storage });
-
+const uploadOptions = multer({
+  storage: storage,
+});
 /**
  * ✅ إنشاء منتج جديد
  */
