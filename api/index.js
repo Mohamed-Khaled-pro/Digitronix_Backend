@@ -55,7 +55,10 @@ mongoose
   .catch((err) => {
     console.log("❌ Database Error:", err.message);
   });
-
+mongoose.connection.once("open", () => {
+  console.log("✅ Connected");
+  console.log("Database:", mongoose.connection.db.databaseName);
+});
 // Routes
 const productsRoutes = require("../routes/products");
 const usersRoutes = require("../routes/users");
