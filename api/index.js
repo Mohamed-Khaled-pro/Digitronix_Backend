@@ -9,7 +9,10 @@ const compression = require("compression");
 
 const app = express();
 
-// CORS
+// =====================
+// Middlewares
+// =====================
+
 app.use(
   cors({
     origin: [
@@ -21,11 +24,11 @@ app.use(
   })
 );
 
-// Middlewares
-app.use(cookieParser());
 app.use(express.json());
+app.use(cookieParser());
 app.use(morgan("combined"));
 app.use(compression());
+
 
 // Logger
 app.use((req, res, next) => {
@@ -35,7 +38,29 @@ app.use((req, res, next) => {
   next();
 });
 
+
+// =====================
+// Database
+// =====================
+
+mongoose
+  .connect(process.env.CONNECTION_BASE, {
+    dbName: "mydatabase",
+    serverSelectionTimeoutMS: 10000,
+  })
+  .then(() => {
+    console.log("✅ Connected to MongoDB");
+    console.log("Database:", mongoose.connection.name);
+  })
+  .catch((err) => {
+    console.log("❌ Database Error:", err.message);
+  });
+
+
+// =====================
 // Test Route
+// =====================
+
 app.get("/", (req, res) => {
   res.json({
     success: true,
@@ -43,44 +68,46 @@ app.get("/", (req, res) => {
   });
 });
 
-// MongoDB Connection
-mongoose
-  .connect(process.env.CONNECTION_BASE, {
-    dbName: "mydatabase",
-    serverSelectionTimeoutMS: 5000,
-  })
-  .then(() => {
-    console.log("✅ Connected to database");
-  })
-  .catch((err) => {
-    console.log("❌ Database Error:", err.message);
-  });
-mongoose.connection.once("open", () => {
-  console.log("✅ Connected");
-  console.log("Database:", mongoose.connection.db.databaseName);
-});
+
+// =====================
+// Helpers
+// =====================
+
+const authJwt = require("../helpers/jwt");
+const errorHandler = require("../helpers/error-handler");
+
+
+// JWT Middleware
+app.use(authJwt());
+
+
+// =====================
 // Routes
+// =====================
+
 const productsRoutes = require("../routes/products");
 const usersRoutes = require("../routes/users");
 const ordersRoutes = require("../routes/orders");
 const categoriesRoutes = require("../routes/categories");
 
-const authJwt = require("../helpers/jwt");
-const errorHandler = require("../helpers/error-handler");
 
-// JWT
-app.use(authJwt());
-
-// API Routes
 app.use("/api/products", productsRoutes);
 app.use("/api/categories", categoriesRoutes);
 app.use("/api/users", usersRoutes);
 app.use("/api/orders", ordersRoutes);
 
-// Error Handler
+
+// =====================
+// Error Handler (LAST)
+// =====================
+
 app.use(errorHandler);
 
-// Start Server
+
+// =====================
+// Server
+// =====================
+
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
