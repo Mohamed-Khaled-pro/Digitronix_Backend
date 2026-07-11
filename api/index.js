@@ -1,78 +1,81 @@
 require("dotenv").config();
+
 const express = require("express");
 const serverless = require("serverless-http");
 const morgan = require("morgan");
-const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const compression = require("compression");
+
 const app = express();
+
+
+// CORS
 app.use(cors({
   origin: "https://digitronix-frontend.vercel.app",
   credentials: true,
 }));
 
+
 // Middlewares
 app.use(cookieParser());
-app.use(bodyParser.json());
+app.use(express.json());
 app.use(morgan("combined"));
 app.use(compression());
 
+
+// Logger
 app.use((req, res, next) => {
-  console.log(`✅ Incoming request: ${req.method} ${req.url} at ${new Date().toISOString()}`);
+  console.log(
+    `✅ Incoming request: ${req.method} ${req.url} at ${new Date().toISOString()}`
+  );
   next();
 });
+
+
+// Database Connection
+mongoose
+  .connect(process.env.CONNECTION_BASE, {
+    dbName: "mydatabase",
+  })
+  .then(() => console.log("✅ Connected to database"))
+  .catch((err) => console.log("❌ DB connection error:", err));
+
+
 
 // Routes
 const productsRoutes = require("../routes/products");
 const usersRoutes = require("../routes/users");
 const ordersRoutes = require("../routes/orders");
 const categoriesRoutes = require("../routes/categories");
+
 const authJwt = require("../helpers/jwt");
 const errorHandler = require("../helpers/error-handler");
 
+
+// JWT Middleware
 app.use(authJwt());
 
+
+// API Routes
 app.use("/api/products", productsRoutes);
 app.use("/api/categories", categoriesRoutes);
-app.use("/api/users", usersRoutes);// users
-app.use("/api/orders", ordersRoutes);//orders
+app.use("/api/users", usersRoutes);
+app.use("/api/orders", ordersRoutes);
 
+
+// Error Handler
 app.use(errorHandler);
 
-// Root route (for testing)
+
+// Test Route
 app.get("/", (req, res) => {
-  res.json({ message: "Hello from Digitronix Backend 🚀" });
+  res.json({
+    message: "Hello from Digitronix Backend 🚀",
+  });
 });
 
-const PORT = process.env.PORT || 5000;
 
-mongoose
-  .connect(process.env.CONNECTION_BASE, {
-    dbName: "mydatabase",
-  })
-  .then(() => {
-    console.log("✅ Connected to database");
-
-    if (process.env.NODE_ENV !== "production") {
-      app.listen(PORT, () => {
-        console.log(`🚀 Server running on http://localhost:${PORT}`);
-      });
-    }
-  })
-  .catch((err) => {
-    console.log("❌ DB connection error:", err);
-  });
-
-
-
-
-if (process.env.NODE_ENV !== "production") {
-  app.listen(PORT, () => {
-    console.log(`🚀 Server running on http://localhost:${PORT}`);
-  });
-}
-// Export for Vercel
-module.exports = app;
-module.exports.handler = serverless(app);
+// Vercel Export
+module.exports = serverless(app);
