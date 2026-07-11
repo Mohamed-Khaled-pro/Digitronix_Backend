@@ -9,7 +9,7 @@ const cookieParser = require("cookie-parser");
 const compression = require("compression");
 const app = express();
 app.use(cors({
-  origin: "https://digitronix-store.netlify.app",
+  origin: "https://digitronix-frontend.vercel.app",
   credentials: true,
 }));
 
@@ -46,15 +46,33 @@ app.get("/", (req, res) => {
   res.json({ message: "Hello from Digitronix Backend 🚀" });
 });
 
-// DB Connection
-mongoose.connect(process.env.CONNECTION_BASE, {
-  dbName: "mydatabase",
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-})
-.then(() => console.log("✅ Connected to database"))
-.catch((err) => console.log("❌ DB connection error:", err));
+const PORT = process.env.PORT || 5000;
 
+mongoose
+  .connect(process.env.CONNECTION_BASE, {
+    dbName: "mydatabase",
+  })
+  .then(() => {
+    console.log("✅ Connected to database");
+
+    if (process.env.NODE_ENV !== "production") {
+      app.listen(PORT, () => {
+        console.log(`🚀 Server running on http://localhost:${PORT}`);
+      });
+    }
+  })
+  .catch((err) => {
+    console.log("❌ DB connection error:", err);
+  });
+
+
+
+
+if (process.env.NODE_ENV !== "production") {
+  app.listen(PORT, () => {
+    console.log(`🚀 Server running on http://localhost:${PORT}`);
+  });
+}
 // Export for Vercel
 module.exports = app;
 module.exports.handler = serverless(app);
