@@ -12,10 +12,16 @@ const app = express();
 
 
 // CORS
-app.use(cors({
-  origin: "https://digitronix-frontend.vercel.app",
-  credentials: true,
-}));
+app.use(
+  cors({
+    origin: [
+      "http://localhost:3000",
+      "http://localhost:5173",
+      "https://digitronix-frontend.vercel.app",
+    ],
+    credentials: true,
+  })
+);
 
 
 // Middlewares
@@ -28,20 +34,32 @@ app.use(compression());
 // Logger
 app.use((req, res, next) => {
   console.log(
-    `✅ Incoming request: ${req.method} ${req.url} at ${new Date().toISOString()}`
+    `✅ ${req.method} ${req.url} - ${new Date().toISOString()}`
   );
   next();
 });
 
 
-// Database Connection
+// Test Route (قبل JWT)
+app.get("/", (req, res) => {
+  res.json({
+    message: "Hello from Digitronix Backend 🚀",
+  });
+});
+
+
+// MongoDB Connection
 mongoose
   .connect(process.env.CONNECTION_BASE, {
     dbName: "mydatabase",
+    serverSelectionTimeoutMS: 5000,
   })
-  .then(() => console.log("✅ Connected to database"))
-  .catch((err) => console.log("❌ DB connection error:", err));
-
+  .then(() => {
+    console.log("✅ Connected to database");
+  })
+  .catch((err) => {
+    console.log("❌ Database Error:", err.message);
+  });
 
 
 // Routes
@@ -54,12 +72,7 @@ const authJwt = require("../helpers/jwt");
 const errorHandler = require("../helpers/error-handler");
 
 
-// JWT Middleware
-app.get("/", (req, res) => {
-  res.json({
-    message: "Hello from Digitronix Backend 🚀",
-  });
-});
+// JWT
 app.use(authJwt());
 
 
@@ -75,8 +88,7 @@ app.use(errorHandler);
 
 
 
-
-// Run Local Server
+// Localhost Run
 if (process.env.NODE_ENV !== "production") {
   const PORT = process.env.PORT || 5000;
 
