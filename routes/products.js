@@ -16,11 +16,7 @@ cloudinary.config({
   api_key: process.env.CLOUD_KEY,
   api_secret: process.env.CLOUD_SECRET,
 });
-console.log({
-  CLOUD_NAME: process.env.CLOUD_NAME,
-  CLOUD_KEY: process.env.CLOUD_KEY,
-  CLOUD_SECRET: process.env.CLOUD_SECRET
-});
+
 // 📌 Multer مع Cloudinary
 const storage = new CloudinaryStorage({
   cloudinary: cloudinary,

@@ -55,6 +55,11 @@ const errorHandler = require("../helpers/error-handler");
 
 
 // JWT Middleware
+app.get("/", (req, res) => {
+  res.json({
+    message: "Hello from Digitronix Backend 🚀",
+  });
+});
 app.use(authJwt());
 
 
@@ -69,12 +74,16 @@ app.use("/api/orders", ordersRoutes);
 app.use(errorHandler);
 
 
-// Test Route
-app.get("/", (req, res) => {
-  res.json({
-    message: "Hello from Digitronix Backend 🚀",
+
+
+// Run Local Server
+if (process.env.NODE_ENV !== "production") {
+  const PORT = process.env.PORT || 5000;
+
+  app.listen(PORT, () => {
+    console.log(`🚀 Server running on http://localhost:${PORT}`);
   });
-});
+}
 
 
 // Vercel Export
