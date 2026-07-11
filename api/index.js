@@ -57,13 +57,13 @@ mongoose
   });
 
 // Routes
-const productsRoutes = require("./routes/products");
-const usersRoutes = require("./routes/users");
-const ordersRoutes = require("./routes/orders");
-const categoriesRoutes = require("./routes/categories");
+const productsRoutes = require("../routes/products");
+const usersRoutes = require("../routes/users");
+const ordersRoutes = require("../routes/orders");
+const categoriesRoutes = require("../routes/categories");
 
-const authJwt = require("./helpers/jwt");
-const errorHandler = require("./helpers/error-handler");
+const authJwt = require("../helpers/jwt");
+const errorHandler = require("../helpers/error-handler");
 
 // JWT
 app.use(authJwt());
