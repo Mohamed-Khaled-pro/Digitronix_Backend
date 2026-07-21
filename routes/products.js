@@ -23,7 +23,7 @@ const storage = new CloudinaryStorage({
   cloudinary,
   params: {
     folder: "digitronix_products",
-    allowed_formats: ["jpg", "png", "jpeg"],
+    allowed_formats: ["jpg", "png", "jpeg" , "webp"],
     transformation: [
       {
         width: 800,
