@@ -34,8 +34,9 @@ const uploadOptions = multer({
  * ✅ إنشاء منتج جديد
  */
 router.post(`/`, uploadOptions.single("image"), requireAdmin, async (req, res) => {
-  console.log("📝 Incoming request body:", req.body);
-  console.log("📝 Incoming file:", req.file);
+  console.log("BODY:", req.body);
+  console.log("FILE:", req.file);
+
 
   try {
     console.log("BODY:", req.body);
