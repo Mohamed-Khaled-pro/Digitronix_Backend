@@ -41,60 +41,67 @@ const uploadOptions = multer({
  * ✅ إنشاء منتج جديد
  */
 router.post(
-  "/",
-  requireAdmin,
-  (req, res, next) => {
-    uploadOptions.single("image")(req, res, (err) => {
-      if (err) {
-        console.log("MULTER ERROR:", err);
-        return res.status(400).json({
-          message: err.message,
-        });
-      }
-      next();
-    });
-  },
-  async (req, res) => {
+ "/",
+ uploadOptions.single("image"),
+ (req,res,next)=>{
+   console.log("AUTH:", req.auth);
+   console.log("AFTER MULTER FILE:", req.file);
+   next();
+ },
+ requireAdmin,
+ async(req,res)=>{
+
     console.log("BODY:", req.body);
     console.log("FILE:", req.file);
 
     try {
-      console.log("BODY:", req.body);
-      console.log("FILE:", req.file);
+
       const category = await Category.findById(req.body.category);
+
       if (!category) {
-        console.log("❌ Invalid category");
-        return res.status(400).send({ message: "Invalid Category" });
+        return res.status(400).send({
+          message:"Invalid Category"
+        });
       }
 
-      // ✅ الصورة بقت اختيارية - لو مفيش صورة نحط قيمة افتراضية أو فاضية
-      const imagePath = req.file ? req.file.path : "";
 
       const product = new Product({
-        name: req.body.name,
-        description: req.body.description,
-        richDescription: req.body.richDescription,
-        image: imagePath,
-        brand: req.body.brand,
-        price: req.body.price,
-        category: req.body.category,
-        countInStock: req.body.countInStock,
-        rating: req.body.rating,
-        numReviews: req.body.numReviews,
-        isFeatured: req.body.isFeatured === "true",
+
+        name:req.body.name,
+        description:req.body.description,
+        richDescription:req.body.richDescription,
+
+        image:req.file ? req.file.path : "",
+
+        brand:req.body.brand,
+        price:req.body.price,
+        category:req.body.category,
+        countInStock:req.body.countInStock,
+        rating:req.body.rating,
+        numReviews:req.body.numReviews,
+        isFeatured:req.body.isFeatured === "true"
+
       });
 
-      const savedProduct = await product.save();
-      console.log("✅ Product saved:", savedProduct);
-      res.status(201).send(savedProduct);
-    } catch (err) {
-      console.error("💥 Full Error:", err.message);
-      console.error("💥 Error Stack:", err.stack);
-      res
-        .status(500)
-        .send({ message: "Internal Server Error", error: err.message });
+
+      const saved = await product.save();
+
+      console.log("✅ SAVED", saved);
+
+      res.status(201).json(saved);
+
+
+    } catch(err){
+
+      console.log(err);
+
+      res.status(500).json({
+        message:err.message
+      });
+
     }
-  },
+
+  }
 );
 
 /**

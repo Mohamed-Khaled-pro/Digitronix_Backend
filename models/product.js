@@ -11,7 +11,7 @@ const productSchema = mongoose.Schema({
     required: true,
     trim: true,
   },
-  richdescription: {
+  richDescription: {
     type: String,
     trim: true,
     default: "",
