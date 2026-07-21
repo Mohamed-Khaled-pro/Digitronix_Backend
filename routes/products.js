@@ -8,7 +8,11 @@ const multer = require("multer");
 const requireAdmin = require("../helpers/requireAdmin");
 const cloudinary = require("cloudinary").v2;
 const { CloudinaryStorage } = require("multer-storage-cloudinary");
-
+console.log({
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.CLOUD_KEY,
+  api_secret: process.env.CLOUD_SECRET ? "EXISTS" : "MISSING",
+});
 cloudinary.config({
   cloud_name: process.env.CLOUD_NAME,
   api_key: process.env.CLOUD_KEY,
@@ -34,6 +38,8 @@ router.post(`/`, uploadOptions.single("image"), requireAdmin, async (req, res) =
   console.log("📝 Incoming file:", req.file);
 
   try {
+    console.log("BODY:", req.body);
+console.log("FILE:", req.file);
     const category = await Category.findById(req.body.category);
     if (!category) {
       console.log("❌ Invalid category");
